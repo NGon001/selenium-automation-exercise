@@ -49,4 +49,7 @@ CARD_EXPIRY_YEAR=
 ### 4. Example of tests runing
 https://github.com/user-attachments/assets/0ce99c06-32d7-41a6-bdaa-b8658c0ec302
 
+### 5. Video
+- Test Run will save video for each test in format <b>(test name) + time stamp.avi </b>
 
+<img width="843" height="368" alt="Screenshot_7" src="https://github.com/user-attachments/assets/794b3ad9-2e7a-4b08-a454-afd19cb91fd6" />

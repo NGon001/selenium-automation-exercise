@@ -11,6 +11,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -23,7 +24,7 @@ public class BaseTest {
     private NetworkInterceptor interceptor;
 
     @BeforeMethod
-    public void setUp() {
+    public void setUp(Method method) throws Exception {
         this.driver = new ChromeDriver();
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -40,16 +41,18 @@ public class BaseTest {
         this.interceptor = new NetworkInterceptor(driver, blockAds);
 
         this.driver.manage().window().maximize();
+        ScreenRecord.startRecording(method.getName());
         this.driver.get("http://automationexercise.com");
     }
 
     @AfterMethod
-    public void tearDown() {
+    public void tearDown() throws Exception {
         if (this.interceptor != null) {
             this.interceptor.close();
         }
         if (this.driver != null) {
             this.driver.quit();
         }
+        ScreenRecord.stopRecording();
     }
 }
