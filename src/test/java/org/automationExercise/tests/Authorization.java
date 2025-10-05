@@ -9,7 +9,6 @@ import static org.automationExercise.pages.Utils.generateRandomEmail;
 
 public class Authorization extends BaseTest {
 
-
      /*
   1. Launch browser
   2. Navigate to url 'http://automationexercise.com'
@@ -91,5 +90,80 @@ public class Authorization extends BaseTest {
         homePage = signUpLoginPage.clickLoginButton();
         homePage.verifyHomePageLoad();
         homePage.verifyLoggedInAs(dotenv.get("VALID_LOGIN_NAME_FIRST"));
+    }
+
+      /*
+  1. Launch browser
+  2. Navigate to url 'http://automationexercise.com'
+  3. Verify that home page is visible successfully
+  4. Click on 'Signup / Login' button
+  5. Verify 'Login to your account' is visible
+  6. Enter incorrect email address and password
+  7. Click 'login' button
+  8. Verify error 'Your email or password is incorrect!' is visible
+   */
+
+    @Test
+    public void loginUserWithIncorrectData(){
+        String incorrectEmail = "max12341@gmail.com";
+        HomePage homePage = new HomePage(driver,wait);
+        homePage.verifyHomePageLoad();
+        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
+        signUpLoginPage.verifyLoginPageText();
+        signUpLoginPage.fillLogin(incorrectEmail,"123");
+        signUpLoginPage.clickLoginButton();
+        signUpLoginPage.verifyErrorIncorrectDataMessage();
+    }
+
+      /*
+  1. Launch browser
+  2. Navigate to url 'http://automationexercise.com'
+  3. Verify that home page is visible successfully
+  4. Click on 'Signup / Login' button
+  5. Verify 'Login to your account' is visible
+  6. Enter correct email address and password
+  7. Click 'login' button
+  8. Verify that 'Logged in as username' is visible
+  9. Click 'Logout' button
+  10. Verify that user is navigated to login page
+   */
+
+    @Test
+    public void logoutUser(){
+        HomePage homePage = new HomePage(driver,wait);
+        homePage.verifyHomePageLoad();
+        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
+        signUpLoginPage.verifyLoginPageText();
+        signUpLoginPage.fillLogin(dotenv.get("VALID_LOGIN_EMAIL"),dotenv.get("VALID_LOGIN_PASSWORD"));
+        homePage = signUpLoginPage.clickLoginButton();
+        homePage.verifyHomePageLoad();
+        homePage.verifyLoggedInAs(dotenv.get("VALID_LOGIN_NAME_FIRST"));
+        signUpLoginPage = homePage.clickLogoutButton();
+        signUpLoginPage.verifyLoginPageText();
+        signUpLoginPage.verifySignUpLoginButtonVisible();
+    }
+
+      /*
+  1. Launch browser
+  2. Navigate to url 'http://automationexercise.com'
+  3. Verify that home page is visible successfully
+  4. Click on 'Signup / Login' button
+  5. Verify 'New User Signup!' is visible
+  6. Enter name and already registered email address
+  7. Click 'Signup' button
+  8. Verify error 'Email Address already exist!' is visible
+   */
+
+    @Test
+    public void registerUserWithExistingEmail(){
+        String fullName = dotenv.get("REGISTER_NAME_FIRST") + " " + dotenv.get("REGISTER_NAME_LAST");
+
+        HomePage homePage = new HomePage(driver,wait);
+        homePage.verifyHomePageLoad();
+        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
+        signUpLoginPage.verifySignUpPageLoaded();
+        signUpLoginPage.fillShortSigUpForm(fullName, dotenv.get("VALID_LOGIN_EMAIL"));
+        signUpLoginPage.clickSignUpButton();
+        signUpLoginPage.verifyEmailExistMessage();
     }
 }

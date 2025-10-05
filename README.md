@@ -5,6 +5,7 @@ This is a **personal project** created to **practice automation testing** contai
 ## 🧰 Tech Stack
 
 - [Selenium Java 4.36.0 ](https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java)
+- [monte-screen-recorder]("https://mvnrepository.com/artifact/com.github.stephenc.monte/monte-screen-recorder"")
 - [Dotenv Java](https://mvnrepository.com/artifact/io.github.cdimascio/dotenv-java) for managing environment variables (  ```VALID_EMAIL, VALID_PASSWORD```)
 - GitHub Actions for CI/CD
 

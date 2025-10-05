@@ -59,4 +59,10 @@ public class HomePage extends BasePage {
         WebElement continueButton = getLinkByText(this.accountDeleteContinueButtonText);
         continueButton.click();
     }
+
+    public SignUpLoginPage clickLogoutButton(){
+        WebElement logoutButton = getLinkByText(this.logoutButtonText);
+        logoutButton.click();
+        return new SignUpLoginPage(driver,wait);
+    }
 }

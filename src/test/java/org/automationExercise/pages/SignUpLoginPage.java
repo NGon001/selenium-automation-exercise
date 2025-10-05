@@ -41,6 +41,10 @@ public class SignUpLoginPage extends BasePage {
     public By loginEmailInputLocator = By.cssSelector("input[data-qa=\"login-email\"]");
     public By loginPasswordInputLocator = By.cssSelector("input[data-qa=\"login-password\"]");
     public String loginButtonText = "Login";
+    public String homeButtonText = "Home";
+    public String signUpEmailAlreadyExistErrorMessage = "Email Address already exist!";
+    public String loginErrorIncorrectDataMessage = "Your email or password is incorrect!";
+    public By navigationBarSignUpLogin = By.cssSelector("ul[class=\"nav navbar-nav\"] a[href=\"/login\"]");
 
     public void verifySignUpPageLoaded(){
         WebElement signUpTextLocator = getByText(this.signUpText);
@@ -159,5 +163,27 @@ public class SignUpLoginPage extends BasePage {
     public void verifyLoginPageText(){
         WebElement loginText = getByTextContains(this.loginAccountText);
         Assert.assertTrue(loginText.isDisplayed());
+    }
+
+    public void verifyErrorIncorrectDataMessage (){
+        WebElement errorMessage = getByTextContains(this.loginErrorIncorrectDataMessage);
+        Assert.assertTrue(errorMessage.isDisplayed());
+    }
+
+    public void verifySignUpLoginButtonVisible(){
+        WebElement signUpLoginButton = wait(this.navigationBarSignUpLogin);
+        Assert.assertTrue(signUpLoginButton.isDisplayed());
+        Assert.assertTrue(signUpLoginButton.isEnabled());
+    }
+
+    public HomePage clickHomeButton(){
+        WebElement homeButton = getLinkByText(this.homeButtonText);
+        homeButton.click();
+        return new HomePage(driver,wait);
+    }
+
+    public void verifyEmailExistMessage(){
+        WebElement errorMessage = getByTextContains(this.signUpEmailAlreadyExistErrorMessage);
+        Assert.assertTrue(errorMessage.isEnabled());
     }
 }
