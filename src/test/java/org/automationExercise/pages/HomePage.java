@@ -7,62 +7,68 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class HomePage extends BasePage {
-    public HomePage(WebDriver driver, WebDriverWait wait) {
-        super(driver, wait);
+    public HomePage(WebDriver driver, WebDriverWait wait,boolean verify) {
+        super(driver, wait,verify);
     }
 
-    public By navigationBarTestCase = By.cssSelector("ul[class=\"nav navbar-nav\"] a[href=\"/test_cases\"]");
-    public By navigationBarSignUpLogin = By.cssSelector("ul[class=\"nav navbar-nav\"] a[href=\"/login\"]");
-    public String futureItemsText = "Features Items";
-    public String deleteAccountButtonText = "Delete Account";
-    public String logoutButtonText = "Logout";
-    public String LoggedInAsText = "Logged in as";
-    public String accountDeletedMessage = "Account Deleted!";
-    public String accountDeleteContinueButtonText = "Continue";
+    private static final By navigationBarTestCase = By.cssSelector("ul[class=\"nav navbar-nav\"] a[href=\"/test_cases\"]");
+    private static final By navigationBarSignUpLogin = By.cssSelector("ul[class=\"nav navbar-nav\"] a[href=\"/login\"]");
+    private static final String futureItemsText = "Features Items";
+    private static final String deleteAccountButtonText = "Delete Account";
+    private static final String logoutButtonText = "Logout";
+    private static final String productsButtonText = "Products";
+    private static final String LoggedInAsText = "Logged in as";
+    private static final String accountDeletedMessage = "Account Deleted!";
+    private static final String accountDeleteContinueButtonText = "Continue";
 
-    public void verifyHomePageLoad(){
-        WebElement featureItemsTextLocaotr = getByText(this.futureItemsText);
+    @Override
+    protected void verifyPageLoaded() {
+        WebElement featureItemsTextLocaotr = getByText(futureItemsText);
         Assert.assertTrue(featureItemsTextLocaotr.isDisplayed());
     }
 
-    public SignUpLoginPage navigateToSignUpLoginPage(){
-        this.verifyHomePageLoad();
-        WebElement signUpLoginButton = wait(this.navigationBarSignUpLogin);
+    public SignUpLoginPage navigateToSignUpLoginPage(boolean verify){
+        WebElement signUpLoginButton = wait(navigationBarSignUpLogin);
         signUpLoginButton.click();
-        return new SignUpLoginPage(driver,wait);
+        return new SignUpLoginPage(driver,wait,verify);
     }
 
-    public TestCasesPage navigateToTestCasesPage(){
-        this.verifyHomePageLoad();
-        WebElement testCasesButton = wait(this.navigationBarTestCase);
+    public TestCasesPage navigateToTestCasesPage(boolean verify){
+        WebElement testCasesButton = wait(navigationBarTestCase);
         testCasesButton.click();
-        return new TestCasesPage(driver, wait);
+        return new TestCasesPage(driver, wait,verify);
+    }
+
+    public ProductsPage navigateToProductsPage(boolean verify){
+        getByTextContains(productsButtonText).click();
+        return new ProductsPage(driver, wait,verify);
     }
 
     public void verifyLoggedInAs(String Name){
-        WebElement loggedInAs = getByTextContains(this.LoggedInAsText);
+        WebElement loggedInAs = getByTextContains(LoggedInAsText);
         Assert.assertTrue(loggedInAs.isDisplayed());
         Assert.assertEquals(loggedInAs.getText(), "Logged in as " + Name);
     }
 
     public void clickDeleteAccountButton(){
-        WebElement deleteAccountButton = getLinkByText(this.deleteAccountButtonText);
+        WebElement deleteAccountButton = getLinkByText(deleteAccountButtonText);
         deleteAccountButton.click();
     }
 
     public void verifyAccountDeletedMessage(){
-        WebElement accountDeletedMessage = getByTextContains(this.accountDeletedMessage);
+        WebElement accountDeletedMessage = getByTextContains(HomePage.accountDeletedMessage);
         Assert.assertTrue(accountDeletedMessage.isDisplayed());
     }
 
     public void clickContinueButton(){
-        WebElement continueButton = getLinkByText(this.accountDeleteContinueButtonText);
+        WebElement continueButton = getLinkByText(accountDeleteContinueButtonText);
         continueButton.click();
+        this.verifyPageLoaded();
     }
 
-    public SignUpLoginPage clickLogoutButton(){
-        WebElement logoutButton = getLinkByText(this.logoutButtonText);
+    public SignUpLoginPage clickLogoutButton(boolean verify){
+        WebElement logoutButton = getLinkByText(logoutButtonText);
         logoutButton.click();
-        return new SignUpLoginPage(driver,wait);
+        return new SignUpLoginPage(driver,wait,verify);
     }
 }

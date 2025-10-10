@@ -3,11 +3,20 @@ package org.automationExercise.tests;
 import org.automationExercise.pages.BaseTest;
 import org.automationExercise.pages.HomePage;
 import org.automationExercise.pages.SignUpLoginPage;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static org.automationExercise.pages.Utils.generateRandomEmail;
 
 public class Authorization extends BaseTest {
+    HomePage homePage;
+    SignUpLoginPage signUpLoginPage;
+
+    @BeforeMethod
+    public void beforeTest(){
+        homePage = new HomePage(driver,wait,true);
+        signUpLoginPage = homePage.navigateToSignUpLoginPage(true);
+    }
 
      /*
   1. Launch browser
@@ -34,12 +43,6 @@ public class Authorization extends BaseTest {
         String fullName = dotenv.get("REGISTER_NAME_FIRST") + " " + dotenv.get("REGISTER_NAME_LAST");
         String email = generateRandomEmail();
 
-        HomePage homePage = new HomePage(driver,wait);
-        homePage.verifyHomePageLoad();
-
-        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
-        signUpLoginPage.verifySignUpPageLoaded();
-
         signUpLoginPage.fillShortSigUpForm(fullName, email);
         signUpLoginPage.clickSignUpButton();
         signUpLoginPage.verefieSignUpFullFormLoaded();
@@ -60,13 +63,11 @@ public class Authorization extends BaseTest {
                 dotenv.get("REGISTER_ZIPCODE"),
                 dotenv.get("REGISTER_MOBILE_NUMBER")
         );
-        homePage = signUpLoginPage.clickContinueButton();
-        homePage.verifyHomePageLoad();
+        homePage = signUpLoginPage.clickContinueButton(true);
         homePage.verifyLoggedInAs(fullName);
         homePage.clickDeleteAccountButton();
         homePage.verifyAccountDeletedMessage();
         homePage.clickContinueButton();
-        homePage.verifyHomePageLoad();
     }
 
       /*
@@ -82,13 +83,8 @@ public class Authorization extends BaseTest {
 
     @Test
     public void loginUserWithCorrectData(){
-        HomePage homePage = new HomePage(driver,wait);
-        homePage.verifyHomePageLoad();
-        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
-        signUpLoginPage.verifyLoginPageText();
         signUpLoginPage.fillLogin(dotenv.get("VALID_LOGIN_EMAIL"),dotenv.get("VALID_LOGIN_PASSWORD"));
-        homePage = signUpLoginPage.clickLoginButton();
-        homePage.verifyHomePageLoad();
+        homePage = signUpLoginPage.clickLoginButton(true);
         homePage.verifyLoggedInAs(dotenv.get("VALID_LOGIN_NAME_FIRST"));
     }
 
@@ -106,12 +102,8 @@ public class Authorization extends BaseTest {
     @Test
     public void loginUserWithIncorrectData(){
         String incorrectEmail = "max12341@gmail.com";
-        HomePage homePage = new HomePage(driver,wait);
-        homePage.verifyHomePageLoad();
-        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
-        signUpLoginPage.verifyLoginPageText();
         signUpLoginPage.fillLogin(incorrectEmail,"123");
-        signUpLoginPage.clickLoginButton();
+        signUpLoginPage.clickLoginButton(false);
         signUpLoginPage.verifyErrorIncorrectDataMessage();
     }
 
@@ -130,15 +122,10 @@ public class Authorization extends BaseTest {
 
     @Test
     public void logoutUser(){
-        HomePage homePage = new HomePage(driver,wait);
-        homePage.verifyHomePageLoad();
-        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
-        signUpLoginPage.verifyLoginPageText();
         signUpLoginPage.fillLogin(dotenv.get("VALID_LOGIN_EMAIL"),dotenv.get("VALID_LOGIN_PASSWORD"));
-        homePage = signUpLoginPage.clickLoginButton();
-        homePage.verifyHomePageLoad();
+        homePage = signUpLoginPage.clickLoginButton(true);
         homePage.verifyLoggedInAs(dotenv.get("VALID_LOGIN_NAME_FIRST"));
-        signUpLoginPage = homePage.clickLogoutButton();
+        signUpLoginPage = homePage.clickLogoutButton(true);
         signUpLoginPage.verifyLoginPageText();
         signUpLoginPage.verifySignUpLoginButtonVisible();
     }
@@ -158,10 +145,6 @@ public class Authorization extends BaseTest {
     public void registerUserWithExistingEmail(){
         String fullName = dotenv.get("REGISTER_NAME_FIRST") + " " + dotenv.get("REGISTER_NAME_LAST");
 
-        HomePage homePage = new HomePage(driver,wait);
-        homePage.verifyHomePageLoad();
-        SignUpLoginPage signUpLoginPage = homePage.navigateToSignUpLoginPage();
-        signUpLoginPage.verifySignUpPageLoaded();
         signUpLoginPage.fillShortSigUpForm(fullName, dotenv.get("VALID_LOGIN_EMAIL"));
         signUpLoginPage.clickSignUpButton();
         signUpLoginPage.verifyEmailExistMessage();

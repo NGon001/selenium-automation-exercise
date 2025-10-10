@@ -8,103 +8,104 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class SignUpLoginPage extends BasePage {
-    public SignUpLoginPage(WebDriver driver, WebDriverWait wait) {
-        super(driver,wait);
+    public SignUpLoginPage(WebDriver driver, WebDriverWait wait,boolean verify) {
+        super(driver,wait,verify);
     }
 
-    public String signUpText = "New User Signup!";
-    public String signUpFullFormText = "Enter Account Information";
-    public String signUpCreateAccountButtonText = "Create Account";
-    public String signUpSuccessMessage = "Account Created!";
-    public String signUpContinueButtonText = "Continue";
-    public String loginAccountText = "Login to your account";
+    private static final String signUpText = "New User Signup!";
+    private static final String signUpFullFormText = "Enter Account Information";
+    private static final String signUpCreateAccountButtonText = "Create Account";
+    private static final String signUpSuccessMessage = "Account Created!";
+    private static final String signUpContinueButtonText = "Continue";
+    private static final String loginAccountText = "Login to your account";
     //public By signUpFormLocator = By.cssSelector("form[action=\"/signup\"]");
-    public By nameInputSigUpFormLocator = By.cssSelector("input[data-qa=\"signup-name\"]");
-    public By emailInputSigUpFormLocator = By.cssSelector("input[data-qa=\"signup-email\"]");
-    public By sigunUpButtonLocator = By.cssSelector("button[data-qa=\"signup-button\"]");
-    public By signUpNameLocator = By.cssSelector("input[data-qa=\"name\"]");
-    public By signUpEmailLocator = By.cssSelector("input[data-qa=\"email\"]");
-    public By signUpPasswordLocator = By.cssSelector("input[data-qa=\"password\"]");
-    public By signUpBirthDayLocator = By.cssSelector("select[data-qa=\"days\"]");
-    public By signUpBirthMonthLocator = By.cssSelector("select[data-qa=\"months\"]");
-    public By signUpBirthYearLocator = By.cssSelector("select[data-qa=\"years\"]");
-    public By signUpFirstNameLocator = By.cssSelector("input[data-qa=\"first_name\"]");
-    public By signUpLastNameLocator = By.cssSelector("input[data-qa=\"last_name\"]");
-    public By signUpCompanyLocator = By.cssSelector("input[data-qa=\"company\"]");
-    public By signUpAddress1Locator = By.cssSelector("input[data-qa=\"address\"]");
-    public By signUpAddress2Locator = By.cssSelector("input[data-qa=\"address2\"]");
-    public By signUpCountryLocator = By.cssSelector("select[data-qa=\"country\"]");
-    public By signUpStateLocator = By.cssSelector("input[data-qa=\"state\"]");
-    public By signUpCityLocator = By.cssSelector("input[data-qa=\"city\"]");
-    public By signUpZipCodeLocator = By.cssSelector("input[data-qa=\"zipcode\"]");
-    public By signUpPhoneNumberLocator = By.cssSelector("input[data-qa=\"mobile_number\"]");
-    public By loginEmailInputLocator = By.cssSelector("input[data-qa=\"login-email\"]");
-    public By loginPasswordInputLocator = By.cssSelector("input[data-qa=\"login-password\"]");
-    public String loginButtonText = "Login";
-    public String homeButtonText = "Home";
-    public String signUpEmailAlreadyExistErrorMessage = "Email Address already exist!";
-    public String loginErrorIncorrectDataMessage = "Your email or password is incorrect!";
-    public By navigationBarSignUpLogin = By.cssSelector("ul[class=\"nav navbar-nav\"] a[href=\"/login\"]");
+    private static final By nameInputSigUpFormLocator = By.cssSelector("input[data-qa=\"signup-name\"]");
+    private static final By emailInputSigUpFormLocator = By.cssSelector("input[data-qa=\"signup-email\"]");
+    private static final By sigunUpButtonLocator = By.cssSelector("button[data-qa=\"signup-button\"]");
+    private static final By signUpNameLocator = By.cssSelector("input[data-qa=\"name\"]");
+    private static final By signUpEmailLocator = By.cssSelector("input[data-qa=\"email\"]");
+    private static final By signUpPasswordLocator = By.cssSelector("input[data-qa=\"password\"]");
+    private static final By signUpBirthDayLocator = By.cssSelector("select[data-qa=\"days\"]");
+    private static final By signUpBirthMonthLocator = By.cssSelector("select[data-qa=\"months\"]");
+    private static final By signUpBirthYearLocator = By.cssSelector("select[data-qa=\"years\"]");
+    private static final By signUpFirstNameLocator = By.cssSelector("input[data-qa=\"first_name\"]");
+    private static final By signUpLastNameLocator = By.cssSelector("input[data-qa=\"last_name\"]");
+    private static final By signUpCompanyLocator = By.cssSelector("input[data-qa=\"company\"]");
+    private static final By signUpAddress1Locator = By.cssSelector("input[data-qa=\"address\"]");
+    private static final By signUpAddress2Locator = By.cssSelector("input[data-qa=\"address2\"]");
+    private static final By signUpCountryLocator = By.cssSelector("select[data-qa=\"country\"]");
+    private static final By signUpStateLocator = By.cssSelector("input[data-qa=\"state\"]");
+    private static final By signUpCityLocator = By.cssSelector("input[data-qa=\"city\"]");
+    private static final By signUpZipCodeLocator = By.cssSelector("input[data-qa=\"zipcode\"]");
+    private static final By signUpPhoneNumberLocator = By.cssSelector("input[data-qa=\"mobile_number\"]");
+    private static final By loginEmailInputLocator = By.cssSelector("input[data-qa=\"login-email\"]");
+    private static final By loginPasswordInputLocator = By.cssSelector("input[data-qa=\"login-password\"]");
+    private static final String loginButtonText = "Login";
+    private static final String homeButtonText = "Home";
+    private static final String signUpEmailAlreadyExistErrorMessage = "Email Address already exist!";
+    private static final String loginErrorIncorrectDataMessage = "Your email or password is incorrect!";
+    private static final By navigationBarSignUpLogin = By.cssSelector("ul[class=\"nav navbar-nav\"] a[href=\"/login\"]");
 
-    public void verifySignUpPageLoaded(){
-        WebElement signUpTextLocator = getByText(this.signUpText);
+    @Override
+    protected void verifyPageLoaded() {
+        WebElement signUpTextLocator = getByText(signUpText);
         Assert.assertTrue(signUpTextLocator.isDisplayed());
     }
 
     public void fillShortSigUpForm(String Name, String email){
-        WebElement nameInput = wait(this.nameInputSigUpFormLocator);
+        WebElement nameInput = wait(nameInputSigUpFormLocator);
         nameInput.sendKeys(Name);
 
-        WebElement emailInput = wait(this.emailInputSigUpFormLocator);
+        WebElement emailInput = wait(emailInputSigUpFormLocator);
         emailInput.sendKeys(email);
     }
 
     public void clickSignUpButton(){
-        WebElement signUpButtonLocator = wait(this.sigunUpButtonLocator);
+        WebElement signUpButtonLocator = wait(sigunUpButtonLocator);
         signUpButtonLocator.click();
     }
 
     public void verefieSignUpFullFormLoaded(){
-        WebElement signUpTextLocator = getByText(this.signUpFullFormText);
+        WebElement signUpTextLocator = getByText(signUpFullFormText);
         Assert.assertTrue(signUpTextLocator.isDisplayed());
     }
 
     public void selectBirthDay(String birthDay, String birthMonth, String birthYear){
-        Select signUpBirthDayInput = getSelectFromElement(wait(this.signUpBirthDayLocator));
+        Select signUpBirthDayInput = getSelectFromElement(wait(signUpBirthDayLocator));
         signUpBirthDayInput.selectByVisibleText(birthDay);
-        Select signUpBirthMonthInput = getSelectFromElement(wait(this.signUpBirthMonthLocator));
+        Select signUpBirthMonthInput = getSelectFromElement(wait(signUpBirthMonthLocator));
         signUpBirthMonthInput.selectByVisibleText(birthMonth);
-        Select signUpBirthYearInput = getSelectFromElement(wait(this.signUpBirthYearLocator));
+        Select signUpBirthYearInput = getSelectFromElement(wait(signUpBirthYearLocator));
         signUpBirthYearInput.selectByVisibleText(birthYear);
     }
 
     public void fillAddressInformation(String Name, String Company, String Address1, String Address2, String Country, String City, String State, String ZipCode, String phoneNumber){
         String firstName = Name.split(" ")[0];
         String lastName = Name.split(" ")[1];
-        WebElement signUpFirstNameInput = wait(this.signUpFirstNameLocator);
+        WebElement signUpFirstNameInput = wait(signUpFirstNameLocator);
         signUpFirstNameInput.sendKeys(firstName);
-        WebElement signUpLastNameInput = wait(this.signUpLastNameLocator);
+        WebElement signUpLastNameInput = wait(signUpLastNameLocator);
         signUpLastNameInput.sendKeys(lastName);
-        WebElement signUpCompanyInput = wait(this.signUpCompanyLocator);
+        WebElement signUpCompanyInput = wait(signUpCompanyLocator);
         signUpCompanyInput.sendKeys(Company);
-        WebElement signUpAddress1Input = wait(this.signUpAddress1Locator);
+        WebElement signUpAddress1Input = wait(signUpAddress1Locator);
         signUpAddress1Input.sendKeys(Address1);
-        WebElement signUpAddress2Input = wait(this.signUpAddress2Locator);
+        WebElement signUpAddress2Input = wait(signUpAddress2Locator);
         signUpAddress2Input.sendKeys(Address2);
-        Select signUpCountryInput = getSelectFromElement(wait(this.signUpCountryLocator));
+        Select signUpCountryInput = getSelectFromElement(wait(signUpCountryLocator));
         signUpCountryInput.selectByVisibleText(Country);
-        WebElement signUpStateInput = wait(this.signUpStateLocator);
+        WebElement signUpStateInput = wait(signUpStateLocator);
         signUpStateInput.sendKeys(State);
-        WebElement signUpCityInput = wait(this.signUpCityLocator);
+        WebElement signUpCityInput = wait(signUpCityLocator);
         signUpCityInput.sendKeys(City);
-        WebElement signUpZipCodeInput = wait(this.signUpZipCodeLocator);
+        WebElement signUpZipCodeInput = wait(signUpZipCodeLocator);
         signUpZipCodeInput.sendKeys(ZipCode);
-        WebElement signUpPhoneNumberInput = wait(this.signUpPhoneNumberLocator);
+        WebElement signUpPhoneNumberInput = wait(signUpPhoneNumberLocator);
         signUpPhoneNumberInput.sendKeys(phoneNumber);
     }
 
     public void verifySuccessSignUpPageLoaded(){
-        WebElement successMessage = getByTextContains(this.signUpSuccessMessage);
+        WebElement successMessage = getByTextContains(signUpSuccessMessage);
         Assert.assertTrue(successMessage.isDisplayed());
     }
 
@@ -115,16 +116,16 @@ public class SignUpLoginPage extends BasePage {
         radio.click();
 
         //Name (Name should be autofill from short form)
-        WebElement nameInput = wait(this.signUpNameLocator);
+        WebElement nameInput = wait(signUpNameLocator);
         Assert.assertEquals(getElementValue(nameInput), Name);
 
         //Email (Email should be autofill from short form)
-        WebElement emailInput = wait(this.signUpEmailLocator);
+        WebElement emailInput = wait(signUpEmailLocator);
         Assert.assertEquals(getElementValue(emailInput), email);
         Assert.assertEquals(emailInput.getAttribute("disabled"), "true");
 
         //Password
-        WebElement passwordInput = wait(this.signUpPasswordLocator);
+        WebElement passwordInput = wait(signUpPasswordLocator);
         passwordInput.sendKeys(password);
         Assert.assertEquals(getElementValue(passwordInput), password);
 
@@ -135,55 +136,55 @@ public class SignUpLoginPage extends BasePage {
         this.fillAddressInformation(Name, Company, Address1, Address2, Country, City, State, ZipCode, phoneNumber);
 
         //Click Create Account button
-        WebElement signUpCreateAccountButton = getButtonByText(this.signUpCreateAccountButtonText);
+        WebElement signUpCreateAccountButton = getButtonByText(signUpCreateAccountButtonText);
         signUpCreateAccountButton.click();
 
         this.verifySuccessSignUpPageLoaded();
     }
 
-    public HomePage clickContinueButton(){
-        WebElement continueButton = getLinkByText(this.signUpContinueButtonText);
+    public HomePage clickContinueButton(boolean verify){
+        WebElement continueButton = getLinkByText(signUpContinueButtonText);
         continueButton.click();
-        return new HomePage(driver,wait);
+        return new HomePage(driver,wait,verify);
     }
 
     public void fillLogin(String email, String password){
-        WebElement emailInput = wait(this.loginEmailInputLocator);
-        WebElement passwordInput = wait(this.loginPasswordInputLocator);
+        WebElement emailInput = wait(loginEmailInputLocator);
+        WebElement passwordInput = wait(loginPasswordInputLocator);
         emailInput.sendKeys(email);
         passwordInput.sendKeys(password);
     }
 
-    public HomePage clickLoginButton(){
-        WebElement loginButton = getButtonByText(this.loginButtonText);
+    public HomePage clickLoginButton(boolean verify){
+        WebElement loginButton = getButtonByText(loginButtonText);
         loginButton.click();
-        return new HomePage(driver,wait);
+        return new HomePage(driver,wait,verify);
     }
 
     public void verifyLoginPageText(){
-        WebElement loginText = getByTextContains(this.loginAccountText);
+        WebElement loginText = getByTextContains(loginAccountText);
         Assert.assertTrue(loginText.isDisplayed());
     }
 
     public void verifyErrorIncorrectDataMessage (){
-        WebElement errorMessage = getByTextContains(this.loginErrorIncorrectDataMessage);
+        WebElement errorMessage = getByTextContains(loginErrorIncorrectDataMessage);
         Assert.assertTrue(errorMessage.isDisplayed());
     }
 
     public void verifySignUpLoginButtonVisible(){
-        WebElement signUpLoginButton = wait(this.navigationBarSignUpLogin);
+        WebElement signUpLoginButton = wait(navigationBarSignUpLogin);
         Assert.assertTrue(signUpLoginButton.isDisplayed());
         Assert.assertTrue(signUpLoginButton.isEnabled());
     }
 
-    public HomePage clickHomeButton(){
-        WebElement homeButton = getLinkByText(this.homeButtonText);
+    public HomePage clickHomeButton(boolean verify){
+        WebElement homeButton = getLinkByText(homeButtonText);
         homeButton.click();
-        return new HomePage(driver,wait);
+        return new HomePage(driver,wait,verify);
     }
 
     public void verifyEmailExistMessage(){
-        WebElement errorMessage = getByTextContains(this.signUpEmailAlreadyExistErrorMessage);
+        WebElement errorMessage = getByTextContains(signUpEmailAlreadyExistErrorMessage);
         Assert.assertTrue(errorMessage.isEnabled());
     }
 }
