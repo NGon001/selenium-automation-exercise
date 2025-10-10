@@ -48,7 +48,8 @@ CARD_EXPIRY_YEAR=
 ```mvn clean test``` - This will run all tests non paralel with help of testng.xml
 
 ### 4. Example of tests runing
-https://github.com/user-attachments/assets/0ce99c06-32d7-41a6-bdaa-b8658c0ec302
+https://github.com/user-attachments/assets/382c751c-717a-4e9a-a969-889473ee8641
+
 
 ### 5. Video
 - Test Run will save video for each test in format <b>(test name) + time stamp.avi </b>
