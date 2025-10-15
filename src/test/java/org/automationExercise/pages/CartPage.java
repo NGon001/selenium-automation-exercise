@@ -36,9 +36,9 @@ public class CartPage extends BasePage {
     public void verifyProductAddedToCart(String Name, double Price, int Quantity, int productIndex){
         List<WebElement> products = verifyProductsExist();
         WebElement product = products.get(productIndex);
-        String productName = waitByElement(product, productNameLocator).getText();
-        double productPrice = ProductData.textPriceToFloat(waitByElement(product, productPriceLocator).getText());
-        int productQuantity = Integer.parseInt(waitByElement(product, productQuantityLocator).getText());
+        String productName = waitByElementAndLocator(product, productNameLocator).getText();
+        double productPrice = ProductData.textPriceToFloat(waitByElementAndLocator(product, productPriceLocator).getText());
+        int productQuantity = Integer.parseInt(waitByElementAndLocator(product, productQuantityLocator).getText());
 
         Assert.assertEquals(productName, Name, "Product name is incorrect");
         Assert.assertEquals(productPrice, Price, "Product price is incorrect");

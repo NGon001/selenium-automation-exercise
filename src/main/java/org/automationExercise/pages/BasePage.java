@@ -37,10 +37,17 @@ public abstract class BasePage {
         return elements;
     }
 
-    public WebElement waitByElement(WebElement parent, By childLocator) {
+    public WebElement waitByElementAndLocator(WebElement parent, By childLocator) {
         WebElement child = this.wait.until(ExpectedConditions.visibilityOf(parent.findElement(childLocator)));
         Assert.assertTrue(child.isDisplayed(), "Child element is not visible: " + childLocator);
         return child;
+    }
+
+    public By getButtonLocator(String text){
+        return By.xpath("//button[contains(normalize-space(.), '"+ text + "')]");
+    }
+    public By getLinkLocator(String text){
+        return By.xpath("//a[contains(normalize-space(.), '"+ text + "')]");
     }
 
     public WebElement getByText(String text){

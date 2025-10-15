@@ -2,7 +2,6 @@ package org.automationExercise.pages;
 
 import org.automationExercise.classes.ProductData;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,6 +20,7 @@ public class ProductsPage extends BasePage {
     private static final By productOverlayAddToCartButtonLocator = By.cssSelector(".product-overlay a");
     private static final By productPriceLocator = By.cssSelector("h2");
     private static final By productNameLocator = By.cssSelector("p");
+    private static final String productViewProductButtonLocator = "View Product";
     private static final String productAddedToCartText = "Your product has been added to cart.";
     private static final String continueShoppingButtonText = "Continue Shopping";
     private static final String viewCartText = "View Cart";
@@ -37,35 +37,54 @@ public class ProductsPage extends BasePage {
         return products;
     }
 
-    public ProductData addProductToCartByIndex(int index) throws InterruptedException {
+    public WebElement getProductByIndex(int index){
         List<WebElement> products = this.verifyProductsExist();
         Assert.assertTrue(index >= 0 && index < products.size(), "Invalid product index");
-        WebElement product = products.get(index);
+        return products.get(index);
+    }
 
-        String productName = waitByElement(product,productNameLocator).getText();
-        double productPrice = ProductData.textPriceToFloat(waitByElement(product,productPriceLocator).getText());
+    public ProductData getProductDataByIndex(int index){
+        WebElement product = getProductByIndex(index);
 
-        WebElement image = waitByElement(product,productImageLocator);
+        String productName = waitByElementAndLocator(product,productNameLocator).getText();
+        double productPrice = ProductData.textPriceToFloat(waitByElementAndLocator(product,productPriceLocator).getText());
+
+        return new ProductData(productName,productPrice);
+    }
+
+    public ProductData addProductToCartByIndex(int index) throws InterruptedException {
+        WebElement product = getProductByIndex(index);
+
+        ProductData productData = getProductDataByIndex(index);
+
+        WebElement image = waitByElementAndLocator(product,productImageLocator);
         Assert.assertTrue(image.isDisplayed() && image.isEnabled(), "Image is not displayed");
 
         ScrollToElement(product);
         Thread.sleep(300);
         hoverToElement(product);
         Thread.sleep(600);
-        WebElement addToCartButton = waitByElement(product,productOverlayAddToCartButtonLocator);
+        WebElement addToCartButton = waitByElementAndLocator(product,productOverlayAddToCartButtonLocator);
         Assert.assertTrue(addToCartButton.isDisplayed() && addToCartButton.isEnabled(), "Add to cart button is not displayed");
         hoverToElement(addToCartButton);
         addToCartButton.click();
 
         getByTextContains(productAddedToCartText);
 
-        return new ProductData(productName,productPrice);
+        return productData;
     }
 
     public CartPage clickViewCart(){
         WebElement viewCartButton = getLinkByText(viewCartText);
         viewCartButton.click();
         return new CartPage(driver,wait,true);
+    }
+
+    public ProductPage clickViewProductByIndex(int index){
+        WebElement product = getProductByIndex(index);
+        WebElement viewProductButton = waitByElementAndLocator(product,getLinkLocator(productViewProductButtonLocator));
+        viewProductButton.click();
+        return new ProductPage(driver,wait,true);
     }
 
     public void clickContinueShopping(){
